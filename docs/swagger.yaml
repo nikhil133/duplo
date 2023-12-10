@@ -1,0 +1,119 @@
+definitions:
+  service.Coordinate:
+    properties:
+      id:
+        type: integer
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  service.Forecast:
+    properties:
+      forecast:
+        items:
+          $ref: '#/definitions/service.Weather'
+        type: array
+      latitude:
+        type: string
+      longitude:
+        type: string
+      status:
+        $ref: '#/definitions/service.Status'
+    type: object
+  service.Status:
+    properties:
+      code:
+        type: integer
+      error:
+        type: boolean
+      message:
+        type: string
+    type: object
+  service.Weather:
+    properties:
+      time:
+        type: string
+      weather:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Duplo Weather Forecast
+paths:
+  /coordinate:
+    delete:
+      description: Delete weather service coordinates based on the provided ID.
+      operationId: delete-coordinates
+      parameters:
+      - description: ID of the coordinates to be deleted
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Record deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request. Invalid ID format.
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error. Failed to delete coordinates.
+          schema:
+            type: string
+      summary: Delete weather service coordinates by ID
+  /coordinate/history:
+    get:
+      description: Retrieve the current weather service coordinates.
+      operationId: get-coordinates
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved coordinates
+          schema:
+            items:
+              $ref: '#/definitions/service.Coordinate'
+            type: array
+        "500":
+          description: Internal Server Error. Failed to fetch coordinates.
+          schema:
+            type: string
+      summary: Get weather service coordinates
+  /forecast:
+    get:
+      description: Retrieve weather forecast data for a given latitude and longitude.
+      operationId: get-forecast
+      parameters:
+      - description: Latitude coordinate
+        in: query
+        name: latitude
+        required: true
+        type: number
+      - description: Longitude coordinate
+        in: query
+        name: longitude
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved forecast data
+          schema:
+            $ref: '#/definitions/service.Forecast'
+        "400":
+          description: Bad Request. Invalid latitude or longitude.
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error. Failed to fetch forecast data.
+          schema:
+            type: string
+      summary: Get weather forecast based on latitude and longitude
+swagger: "2.0"

@@ -1,0 +1,16 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=forecast
+
+ENV MYSQL_USER=duplo
+ENV MYSQL_PASSWORD=root
+VOLUME /var/lib/mysql
+
+EXPOSE 3306
+CMD ["mysqld"]
+
+
+# Example build and run commands:
+# docker build -t mysql-forecast .
+# docker run -p 3306:3306 --name mysql-forecast -d mysql-forecast
